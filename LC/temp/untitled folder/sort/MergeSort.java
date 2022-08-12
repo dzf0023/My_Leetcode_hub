@@ -76,6 +76,60 @@ class MergeSort{
 
 
 
+/////////////////second ways
+class Solution {
+    public int[] sortArray(int[] nums) {
+        if(nums.length <= 1){
+            return nums;
+        }
+        
+        int pivot = nums.length / 2;
+        
+        int[] left_nums = sortArray(Arrays.copyOfRange(nums, 0, pivot));
+        int[] right_nums = sortArray(Arrays.copyOfRange(nums, pivot, nums.length));
+        
+        return merge(left_nums, right_nums);
+    }
+    
+    
+    public int[] merge(int[] left, int[] right){
+        int left_length = left.length;
+        int right_length = right.length;
+        
+        int l_point = 0;
+        int r_point = 0;
+        int[] res = new int[left_length + right_length];
+        int idx = 0;
+        while(l_point < left_length && r_point < right_length){
+            if(left[l_point] < right[r_point]){
+                res[idx] = left[l_point];
+                idx += 1;
+                l_point += 1;
+            }else{
+                res[idx] = right[r_point];
+                idx += 1;
+                r_point += 1;
+            }
+        }
+        
+        while(l_point < left_length){
+            res[idx] = left[l_point];
+            idx += 1;
+            l_point += 1;
+        }
+        
+        while(r_point < right_length){
+            res[idx] = right[r_point];
+            idx += 1;
+            r_point += 1;
+        }
+        
+        return res;
+        
+        
+    }
+}
+
 
 
 
