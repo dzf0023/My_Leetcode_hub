@@ -16,11 +16,13 @@ class UnionFind {
         return root[x] = find(root[x]);
     }
 
-    public void union(int x, int y) {
-        int rootX = find(x);
-        int rootY = find(y);
-        if (rootX != rootY) {
-            root[rootY] = rootX;
+    void union(int x, int y){
+        x = root[x];
+        y = root[y];
+        if(x < y){
+            root[y] = x;
+        }else{
+            root[x] = y;
         }
     }
 
