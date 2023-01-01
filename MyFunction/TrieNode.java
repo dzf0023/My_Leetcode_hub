@@ -50,6 +50,19 @@ class Solution {
 
 
 ============ first way, use TrieNode[] array , second use hashmap==================
+  class TrieNode {
+    public Map<Character, TrieNode> children = new HashMap<>();
+    
+    // you might need some extra values according to different cases
+};
+
+/** Usage:
+ *  Initialization: TrieNode root = new TrieNode();
+ *  Return a specific child node with char c: root.children.get(c)
+ */  
+    
+    
+    
   class WordFilter {
     TrieNode trie;
     public WordFilter(String[] words) {
