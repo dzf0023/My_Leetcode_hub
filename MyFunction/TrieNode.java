@@ -1,52 +1,130 @@
-class TrieNode{
+class Node{
     
-    TrieNode[] children;
-    int visited;
+    // public char c;
+    public boolean isEndWord;
+    public Node[] children;
     
-    public TrieNode(){
-        children = new TrieNode[26];
-        visited = 0;
+    // public Node(){}
+    public Node(){
+        // this.c = c;
+        isEndWord = false;
+        children = new Node[26];
+    }
+}
+class Trie {
+    
+    private Node root;
+    
+    public Trie() {
+       root = new Node();
+    }
+    
+    public void insert(String word) {
+        Node node = root;
+        for(char c: word.toCharArray()){
+            if(node.children[c - 'a'] == null){
+                node.children[c-'a'] = new Node();
+            }
+            node = node.children[c-'a'];
+        }
+        node.isEndWord = true;
+    }
+    
+    public boolean search(String word) {
+        Node node = root;
+        for(char c: word.toCharArray()){
+            if(node.children[c - 'a'] == null){
+                return false;
+            }
+            node = node.children[c - 'a'];
+        }
+        return node.isEndWord;
+    }
+    
+    public boolean startsWith(String prefix) {
+        Node node = root;
+        for(char c: prefix.toCharArray()){
+            if(node.children[c - 'a'] == null){
+                return false;
+            }
+            node = node.children[c - 'a'];
+        }
+        return true;
     }
 }
 
-class Solution {
-    
+
+============================
+    // ake "apple" as an example, we will insert add "apple{apple", "pple{apple", "ple{apple", "le{apple", "e{apple", "{apple" into the Trie Tree.
+// If the query is: prefix = "app", suffix = "le", we can find it by querying our trie for
+// "le { app".
+// 在每一个node地方加上idx， 因为有重复，会返回最大的，所以可以一直更新
+
+class WordFilter {
     TrieNode root = new TrieNode();
     
+    void buildTree(TrieNode root, String S, int id){
+        TrieNode node = root;
+        for(char c: S.toCharArray()){
+            if(node.children[c - 'a'] == null){
+                node.children[c - 'a'] = new TrieNode();
+            }
+            node = node.children[c - 'a'];
+            node.ids.add(id);
+        }
+    }
     
-    public int[] sumPrefixScores(String[] words) {
+    public WordFilter(String[] words) {
+        TrieNode node = root;
         
-        int[] ans = new int[words.length];
-        
-        for(String word: words){
-            TrieNode cur = root;
+        for(int i = 0; i < words.length; i++){
+            String word = words[i];
+            String rWord = "";
             
-            for(char c: word.toCharArray()){
-                if(cur.children[c - 'a'] == null){
-                    cur.children[c - 'a'] = new TrieNode();
-                }
-                cur.children[c - 'a'].visited += 1;
-                cur = cur.children[c - 'a'];
+            for(int j = 0; j < word.length(); j++){
+                rWord = word.substring(word.length() - j - 1);
+                buildTree(node, rWord + "{" + word, i);
             }
+            buildTree(node, "{" + word, i);
         }
-        
-        int idx = 0;
-        
-        for(String word: words){
-            TrieNode node = root;
-            int curVal = 0;
-            
-            for(char c: word.toCharArray()){
-                curVal += node.children[c - 'a'].visited;
+    }
+    
+    public int f(String pref, String suff) {
+        // String newSuff = reverse(suff);
+        String S = suff + "{" + pref;
+        TrieNode node = root;
+        for(char c: S.toCharArray()){
+            if(node.children[c - 'a'] == null){
+                return -1;
+            }else{
                 node = node.children[c - 'a'];
-                    
             }
-            ans[idx++] = curVal;
         }
-        return ans;
-        
+        return node.ids.get(node.ids.size() - 1);
     }
 }
+
+
+class TrieNode{
+    
+    TrieNode[] children;
+    List<Integer> ids;
+    public TrieNode(){
+        children  = new TrieNode[27];
+        ids = new ArrayList<>();
+    }
+    
+}
+    =================================
+
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * boolean param_2 = obj.search(word);
+ * boolean param_3 = obj.startsWith(prefix);
+ */
 
 
 ============ first way, use TrieNode[] array , second use hashmap==================
