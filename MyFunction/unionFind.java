@@ -17,7 +17,7 @@ class UnionFind {
     }
 
     void union(int x, int y){
-        x = root[x];
+        x = root[x];   // 这个地方注意是  find(x) 还是 root[x]， 有时候只能是 find(x)
         y = root[y];
         if(x < y){
             root[y] = x;
